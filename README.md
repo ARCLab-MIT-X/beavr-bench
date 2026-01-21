@@ -47,32 +47,37 @@ uv run beavr-eval --help
 
 ---
 
-## Demonstrations
+## 🎥 Demonstrations
 
 We include 4 main scenes designed to test physical intelligence. For a detailed breakdown of rules and task definitions, see [**SCENES.md**](docs/SCENES.md).
 
-### Pick and Place
+<div align="center">
+<table>
+  <tr>
+    <td align="center">
+      <b>📦 Pick and Place</b><br>
+      <img src="media/videos/pickplace.gif" width="400px">
+    </td>
+    <td align="center">
+      <b>🐚 Shell Game</b><br>
+      <img src="media/videos/shellgame.gif" width="400px">
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <b>🖥️ Server Swap</b><br>
+      <img src="media/videos/serverswap_ego.gif" width="400px">
+    </td>
+    <td align="center">
+      <b>🗺️ Vanishing Blueprint</b><br>
+      <img src="media/videos/vanishing_blueprint.gif" width="400px">
+    </td>
+  </tr>
+</table>
+</div>
 
-![Pick and Place](media/videos/pickplace.gif)
-
-### Shell Game
-
-![Shell Game](media/videos/shellgame.gif) 
-
-### Server Swap
-
-![Server Swap Overhead](media/videos/serverswap_overhead.gif)
-![Server Swap Egocentric](media/videos/serverswap_ego.gif)
-
-### Vanishing Blueprint
-
-![Vanishing Blueprint](media/videos/vanishing_blueprint.gif)
-
-### Datasets
-
-Access our pre-collected demonstration datasets for imitation learning research on HuggingFace.
-
-[🤗 **View Datasets on HuggingFace**](https://huggingface.co/collections/arclabmit/beavr-sim)
+> **Note:** Access our pre-collected demonstration datasets for imitation learning research on HuggingFace:
+> [🤗 **View Datasets on HuggingFace**](https://huggingface.co/collections/arclabmit/beavr-sim)
 
 ---
 
