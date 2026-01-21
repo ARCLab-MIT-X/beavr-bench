@@ -67,23 +67,20 @@ class VanishingBlueprintRules(BaseRules):
                 raise ValueError(f"Block body {body_id} has no geoms?")
             self._block_geom_ids.append(geom_id)
 
-        # RNG for shuffling
-        self._rng = np.random.default_rng(config.shuffle_seed)
-
         # State tracking
         self._state = self.STATE_SHOWING
         self._blueprint_order: list[int] = []  # Indices into block_names (bottom to top)
         self._success = False
 
-        # Generate initial blueprint
-        self._generate_blueprint()
+        # Initial blueprint selection (will be overwritten by randomize_scene in TeleopTask.reset)
+        self._select_blueprint(np.random.default_rng(config.shuffle_seed))
 
         logger.info(f"Vanishing Blueprint: Showing hologram for {config.show_duration}s...")
 
-    def _generate_blueprint(self) -> None:
+    def _select_blueprint(self, rng: np.random.Generator) -> None:
         """Generate a random stack order (bottom to top)."""
         indices = list(range(len(self._block_names)))
-        self._rng.shuffle(indices)
+        rng.shuffle(indices)
         self._blueprint_order = indices
         order_names = [self._block_names[i] for i in self._blueprint_order]
         logger.info(f"Blueprint order (bottom to top): {order_names}")
@@ -180,7 +177,7 @@ class VanishingBlueprintRules(BaseRules):
         super().reset()
         self._state = self.STATE_SHOWING
         self._success = False
-        self._generate_blueprint()
+        # Do NOT generate blueprint here; randomize_scene will do it.
         logger.info(f"Reset: SHOWING for {self.config.show_duration}s...")
 
     def _update_holograms(self, data: mujoco.MjData) -> None:
@@ -188,6 +185,7 @@ class VanishingBlueprintRules(BaseRules):
         visible = self._state == self.STATE_SHOWING
         self._position_holograms(data, visible=visible)
 
-    def randomize_scene(self, data: mujoco.MjData) -> None:
-        """Initialize hologram positions."""
+    def randomize_scene(self, data: mujoco.MjData, np_random: np.random.Generator) -> None:
+        """Generate a new blueprint and update hologram positions."""
+        self._select_blueprint(np_random)
         self._update_holograms(data)

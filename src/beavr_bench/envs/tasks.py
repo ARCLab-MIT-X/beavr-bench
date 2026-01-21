@@ -10,7 +10,7 @@ import threading
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import gymnasium as gym
 import mujoco
@@ -167,8 +167,23 @@ class BaseTask(gym.Env, ABC):
         if self.viewer is not None:
             self.viewer.sync()
 
-    def reset(self):
-        """Reset simulation to initial state."""
+    def reset(
+        self,
+        *,
+        seed: int | None = None,
+        options: dict | None = None,
+    ) -> tuple[Any, dict[str, Any]]:
+        """Reset simulation to initial state.
+
+        Args:
+            seed: Optional random seed
+            options: Optional reset options
+
+        Returns:
+            Tuple of (observation, info). Subclasses should override to return actual observations.
+        """
+        super().reset(seed=seed)
+
         with self.lock:
             mujoco.mj_resetData(self.model, self.data)
 
@@ -182,6 +197,8 @@ class BaseTask(gym.Env, ABC):
                         break
 
             mujoco.mj_forward(self.model, self.data)
+
+        return {}, {}
 
     def close(self):
         """Clean up resources."""
@@ -419,8 +436,8 @@ class TeleopTask(BaseTask):
         Returns:
             Tuple of (observation, info) where observation is {"agent_pos": array}
         """
-        if seed is not None:
-            np.random.seed(seed)
+        # Call super().reset() which handles self.np_random
+        super().reset(seed=seed, options=options)
 
         with self.lock:
             # 1. MuJoCo reset - uses default qpos0
@@ -436,9 +453,9 @@ class TeleopTask(BaseTask):
             if self._rules is not None:
                 self._rules.reset()
 
-            # 5. Randomize scene using task rules
+            # 5. Randomize scene using task rules and current RNG
             if self._rules is not None:
-                self._rules.randomize_scene(self.data)
+                self._rules.randomize_scene(self.data, self.np_random)
 
             # 6. Clear stored targets
             self._last_targets.clear()

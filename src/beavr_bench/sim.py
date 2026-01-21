@@ -165,12 +165,7 @@ def load_baked_scene(scene_name: str) -> BakedScene:
         elif scene_name == "scene_vanishing_blueprint":
             task_rules = VanishingBlueprintRuleConfig()
         elif scene_name == "scene_pickplace":
-            task_rules = ReachRuleConfig(target_object="box", goal_site="goal_site")
-
-    logger.info(
-        f"Loaded scene '{meta[MetadataKey.NAME]}' with {len(robots)} robots, "
-        f"{len(cameras)} cameras, and rules: {type(task_rules).__name__ if task_rules else 'None'}"
-    )
+            task_rules = ReachRuleConfig(target_object="box", goal_site="bin_site")
 
     return BakedScene(
         name=meta[MetadataKey.NAME],

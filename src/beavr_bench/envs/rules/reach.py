@@ -82,12 +82,19 @@ class ReachRules(BaseRules):
             },
         )
 
-    def randomize_scene(self, data: mujoco.MjData) -> None:
+    def randomize_scene(self, data: mujoco.MjData, np_random: np.random.Generator) -> None:
         """Randomize box position at episode start."""
-        # Find the target object's joint if it exists
-        # In Reach task, we expect a joint named {target_object}_joint
+        # Find the target object's joint.
+        # Try {target_object}_joint first, then fallback to any joint attached to the body.
         joint_name = f"{self.config.target_object}_joint"
         jnt_id = mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_JOINT, joint_name)
+
+        if jnt_id == -1 and self._target_body_id != -1:
+            # Look for any joint belonging to this body
+            for i in range(self.model.njnt):
+                if self.model.jnt_bodyid[i] == self._target_body_id:
+                    jnt_id = i
+                    break
 
         if jnt_id != -1:
             qpos_adr = self.model.jnt_qposadr[jnt_id]
@@ -95,8 +102,8 @@ class ReachRules(BaseRules):
             init_y = self.model.qpos0[qpos_adr + 1]
             rand_range = self.config.box_randomization_range
 
-            data.qpos[qpos_adr] = init_x + np.random.uniform(-rand_range, rand_range)
-            data.qpos[qpos_adr + 1] = init_y + np.random.uniform(-rand_range, rand_range)
+            data.qpos[qpos_adr] = init_x + np_random.uniform(-rand_range, rand_range)
+            data.qpos[qpos_adr + 1] = init_y + np_random.uniform(-rand_range, rand_range)
             logger.debug(f"Randomized {self.config.target_object} (range={rand_range})")
 
     def reset(self) -> None:

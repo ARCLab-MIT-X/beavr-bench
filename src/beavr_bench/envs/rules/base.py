@@ -9,6 +9,7 @@ from typing import Any
 
 import draccus
 import mujoco
+import numpy as np
 
 from beavr_bench.schemas import (
     TaskRulesConfig,
@@ -62,8 +63,8 @@ class BaseRules(ABC):
         pass
 
     @abstractmethod
-    def randomize_scene(self, data: mujoco.MjData) -> None:
-        """Randomize object positions at episode start.
+    def randomize_scene(self, data: mujoco.MjData, np_random: np.random.Generator) -> None:
+        """Randomize object positions at episode start using the provided RNG.
 
         Default implementation does nothing. Subclasses should override if
         they require specific object randomization.

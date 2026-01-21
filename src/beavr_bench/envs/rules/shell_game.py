@@ -76,24 +76,21 @@ class ShellGameRules(BaseRules):
 
         self._table_z = 0.445
 
-        # Generate shuffle
-        self._rng = np.random.default_rng(config.shuffle_seed)
+        # Initialize shuffle state (will be populated by randomize_scene)
         self._shuffle_sequence: list[tuple[int, int]] = []
         self._target_slot_idx = 0
-        self._generate_shuffle()
+        self._num_swaps = 0
 
         logger.info(f"Shell Game: Showing ball for {self._timer_showing}s")
 
-    def _generate_shuffle(self) -> None:
+    def _generate_shuffle(self, rng: np.random.Generator) -> None:
         """Generate deterministic slot swaps and compute final ball slot."""
-        self._num_swaps = int(
-            self._rng.integers(self.config.shuffle_min_swaps, self.config.shuffle_max_swaps + 1)
-        )
+        self._num_swaps = int(rng.integers(self.config.shuffle_min_swaps, self.config.shuffle_max_swaps + 1))
         # Per user requirement: the ball always starts with the target cup
         ball_slot = self._ball_cup_idx
         self._shuffle_sequence = []
         for _ in range(self._num_swaps):
-            s1, s2 = self._rng.choice([0, 1, 2], size=2, replace=False)
+            s1, s2 = rng.choice([0, 1, 2], size=2, replace=False)
             self._shuffle_sequence.append((int(s1), int(s2)))
             if ball_slot == s1:
                 ball_slot = s2
@@ -265,14 +262,15 @@ class ShellGameRules(BaseRules):
         self._success = False
         self._failure = False
         self._cup_to_slot = list(range(len(self._cup_names)))
-        self._generate_shuffle()
+        # Do NOT generate shuffle here; randomize_scene will do it.
         logger.info(f"Reset: SHOWING for {self._timer_showing}s...")
 
     def get_shuffle_sequence(self) -> list[tuple[int, int]]:
         return self._shuffle_sequence.copy()
 
-    def randomize_scene(self, data: mujoco.MjData) -> None:
-        """Randomize cup positions if needed (handled by state machine)."""
-        # Shell game initializes state in constructor and reset(),
-        # actual movement is handled in compute() state machine.
-        pass
+    def randomize_scene(self, data: mujoco.MjData, np_random: np.random.Generator) -> None:
+        """Generate a new shuffle sequence."""
+        self._generate_shuffle(np_random)
+        logger.info(
+            f"Shuffle randomized: {len(self._shuffle_sequence)} swaps, target slot {self._target_slot_idx}"
+        )

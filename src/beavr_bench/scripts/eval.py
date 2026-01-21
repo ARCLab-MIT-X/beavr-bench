@@ -1,6 +1,6 @@
-"""Evaluation entry point for beavr-sim.
+"""Evaluation entry point for beavr-bench.
 
-Wraps lerobot-eval to ensure beavr-sim environments are registered.
+Wraps lerobot-eval to ensure beavr-bench environments are registered.
 All standard lerobot-eval arguments are supported.
 
 Example:

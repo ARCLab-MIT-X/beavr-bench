@@ -61,9 +61,9 @@ class ServerSwapRules(BaseRules):
             if geom_id == -1:
                 raise ValueError(f"LED geom '{geom_name}' not found")
 
-            # Slot center is relative to LED position: x=0, y=0.05 (matching original sled placement)
+            # Slot center is relative to LED position: x_offset=0, y_offset=0.05 (matching original sled placement)
             led_pos = model.geom_pos[geom_id]
-            slot_pos = np.array([0.0, 0.05, led_pos[2]])
+            slot_pos = np.array([led_pos[0], led_pos[1] + 0.05, led_pos[2]])
             self._slot_positions.append(slot_pos)
 
         # Cache replacement sled body ID
@@ -73,26 +73,23 @@ class ServerSwapRules(BaseRules):
         if self._replacement_body_id == -1:
             raise ValueError(f"Replacement sled '{config.replacement_sled}' not found")
 
-        # RNG for selecting failing slot
-        self._rng = np.random.default_rng(config.failing_slot_seed)
-
         # State tracking
         self._state = ServerSwapState.CUE
         self._failing_slot_idx: int = 0
         self._success = False
         self._failure = False
 
-        # Generate initial failing slot
-        self._select_failing_slot()
+        # Initial failing slot selection (will be overwritten by randomize_scene in TeleopTask.reset)
+        self._select_failing_slot(np.random.default_rng(config.failing_slot_seed))
 
         logger.info(
             f"ServerPlacement: Target slot {self._failing_slot_idx} "
             f"will show orange LED for {config.cue_duration}s"
         )
 
-    def _select_failing_slot(self) -> None:
-        """Randomly select which slot is the goal."""
-        self._failing_slot_idx = int(self._rng.integers(0, len(self._led_material_names)))
+    def _select_failing_slot(self, rng: np.random.Generator) -> None:
+        """Select which slot is the goal using the provided RNG."""
+        self._failing_slot_idx = int(rng.integers(0, len(self._led_material_names)))
 
     def _set_led_color(self, model: mujoco.MjModel, slot_idx: int, rgba: tuple) -> None:
         """Set the LED color for a specific slot."""
@@ -199,11 +196,8 @@ class ServerSwapRules(BaseRules):
         self._state = ServerSwapState.CUE
         self._success = False
         self._failure = False
-        self._select_failing_slot()
-        self._update_leds()
-        logger.info(
-            f"Reset: CUE phase for {self.config.cue_duration}s, failing slot={self._failing_slot_idx}"
-        )
+        # LEDs will be updated in randomize_scene which is called by TeleopTask.reset
+        logger.info(f"Reset: CUE phase for {self.config.cue_duration}s")
 
     def _update_leds(self) -> None:
         """Update LED colors in the model based on current state."""
@@ -214,6 +208,8 @@ class ServerSwapRules(BaseRules):
         else:
             self._set_all_leds_green(self.model)
 
-    def randomize_scene(self, data: mujoco.MjData) -> None:
-        """No scene randomization needed - sled positions are fixed."""
-        pass
+    def randomize_scene(self, data: mujoco.MjData, np_random: np.random.Generator) -> None:
+        """Select a new failing slot using the provided RNG."""
+        self._select_failing_slot(np_random)
+        self._update_leds()
+        logger.info(f"Randomized failing slot: {self._failing_slot_idx}")

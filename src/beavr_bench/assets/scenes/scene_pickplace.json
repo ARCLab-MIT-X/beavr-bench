@@ -43,7 +43,7 @@
   "cameras": [
     {
       "name": "overhead",
-      "obs_key": "observation.images.overhead",
+      "obs_key": "overhead",
       "width": 640,
       "height": 480
     }
