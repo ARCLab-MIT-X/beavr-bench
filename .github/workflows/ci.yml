@@ -17,7 +17,7 @@ jobs:
               with:
                   enable-cache: true
             - name: Set up Python
-              run: uv python install
+              run: uv python install 3.12
             - name: Install dependencies
               run: uv sync
             - name: Run Ruff check
@@ -34,7 +34,7 @@ jobs:
               with:
                   enable-cache: true
             - name: Set up Python
-              run: uv python install
+              run: uv python install 3.12
             - name: Install dependencies (including dev)
               run: uv sync --all-groups
             - name: Run tests
