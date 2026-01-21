@@ -23,7 +23,7 @@ jobs:
             - name: Install system dependencies
               run: |
                   sudo apt-get update
-                  sudo apt-get install -y libgl1-mesa-glx libosmesa6 libegl1-mesa
+                  sudo apt-get install -y libgl1 libosmesa6 libegl1
             - name: Run Ruff check
               run: uv run ruff check .
             - name: Run Ruff format
@@ -46,6 +46,6 @@ jobs:
             - name: Install system dependencies
               run: |
                   sudo apt-get update
-                  sudo apt-get install -y libgl1-mesa-glx libosmesa6 libegl1-mesa
+                  sudo apt-get install -y libgl1 libosmesa6 libegl1
             - name: Run tests
               run: uv run pytest
