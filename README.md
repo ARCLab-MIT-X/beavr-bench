@@ -59,7 +59,7 @@ We include 4 main scenes designed to test physical intelligence. For a detailed 
       <img src="media/videos/pickplace.gif" width="400px">
     </td>
     <td align="center">
-      <b>🐚 Shell Game</b><br>
+      <b>Shell Game</b><br>
       <img src="media/videos/shellgame.gif" width="400px">
     </td>
   </tr>
