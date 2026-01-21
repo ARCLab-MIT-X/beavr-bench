@@ -31,4 +31,4 @@ jobs:
                       dist/*.tar.gz
                   generate_release_notes: true
               env:
-                  GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+                  GITHUB_TOKEN: ${{ secrets.RELEASE_PAT }}
