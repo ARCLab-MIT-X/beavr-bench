@@ -1,0 +1,36 @@
+cff-version: 1.2.0
+title: "BEAVR Sim: GPU-Accelerated RL & Imitation Learning for Robotic Manipulation"
+message: "If you use this software, please cite it as below."
+type: software
+authors:
+  - family-names: "Posadas-Nava"
+    given-names: "Alejandro"
+  - family-names: "Carrasco"
+    given-names: "Alejandro"
+  - family-names: "Linares"
+    given-names: "Richard"
+repository-code: "https://github.com/ARCLab-MIT/beavr-bench"
+url: "https://arxiv.org/abs/2508.09606"
+keywords:
+  - robotics
+  - reinforcement-learning
+  - imitation-learning
+  - simulation
+  - mujoco
+  - lerobot
+license: Apache-2.0
+version: 1.0.0
+date-released: 2025-08-01
+preferred-citation:
+  type: misc
+  authors:
+    - family-names: "Posadas-Nava"
+      given-names: "Alejandro"
+    - family-names: "Carrasco"
+      given-names: "Alejandro"
+    - family-names: "Linares"
+      given-names: "Richard"
+  title: "BEAVR: Bimanual, multi-Embodiment, Accessible, Virtual Reality Teleoperation System for Robots"
+  year: 2025
+  publisher: "arXiv"
+  url: "https://arxiv.org/abs/2508.09606"
