@@ -49,79 +49,24 @@ uv run beavr-eval --help
 
 ## Demonstrations
 
-We include 4 main scenes designed to test physical intelligence, ranging from simple manipulation to complex memory-based challenges.
+We include 4 main scenes designed to test physical intelligence. For a detailed breakdown of rules and task definitions, see [**SCENES.md**](docs/SCENES.md).
 
-<table>
-  <tr>
-    <th width="50%">Scene</th>
-    <th width="50%">Description</th>
-  </tr>
-  <tr>
-    <td align="center">
-      <h3>Pick and Place</h3>
-      <img src="media/pickplace.gif" width="100%" alt="Pick and Place">
-    </td>
-    <td>
-      <p><strong>Simple manipulation task demonstrating object grasping and placement.</strong></p>
-      <p>The system learns to pick up objects from randomized positions and place them at a target location.</p>
-      <p>
-        <code>Manipulation</code> <code>Grasping</code> <code>IL</code>
-      </p>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <h3>Shell Game</h3>
-      <img src="media/shellgame.gif" width="100%" alt="Shell Game">
-    </td>
-    <td>
-      <p><strong>Advanced memory and tracking task.</strong></p>
-      <p>The robot must track the cup containing a concealed object. Designed to test object permanence and memory amid occlusions.</p>
-      <p>
-        <code>Tracking</code> <code>Memory</code> <code>IL</code>
-      </p>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <h3>Server Swap (Overhead)</h3>
-      <img src="media/serverswap_overhead.gif" width="100%" alt="Server Swap Overhead">
-    </td>
-    <td>
-      <p><strong>Mobile manipulation and precision assembly.</strong></p>
-      <p>Top-down perspective where the robot coordinates its arm and mobile base to insert server components into the correct slot indicated by a transient LED.</p>
-      <p>
-        <code>Egocentric</code> <code>Precision</code> <code>Assembly</code>
-      </p>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <h3>Server Swap (Egocentric)</h3>
-      <img src="media/serverswap_ego.gif" width="100%" alt="Server Swap Ego">
-    </td>
-    <td>
-      <p><strong>First-person manipulation perspective.</strong></p>
-      <p>A closer look at the detailed interaction from the robot's viewpoint during the server module replacement task.</p>
-      <p>
-        <code>Egocentric</code> <code>Precision</code> <code>Assembly</code>
-      </p>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <h3>Vanishing Blueprint</h3>
-      <img src="media/vanishing_blueprint.gif" width="100%" alt="Vanishing Blueprint">
-    </td>
-    <td>
-      <p><strong>Sequential memory and stacking task.</strong></p>
-      <p>A blueprint is shown for 5 seconds before vanishing. The robot must recall the correct order of objects to stack them successfully.</p>
-      <p>
-        <code>Stacking</code> <code>Memory</code> <code>Configuration</code>
-      </p>
-    </td>
-  </tr>
-</table>
+### Pick and Place
+
+![Pick and Place](media/pickplace.gif)
+
+### Shell Game
+
+![Shell Game](media/shellgame.gif)
+
+### Server Swap
+
+![Server Swap Overhead](media/serverswap_overhead.gif)
+![Server Swap Egocentric](media/serverswap_ego.gif)
+
+### Vanishing Blueprint
+
+![Vanishing Blueprint](media/vanishing_blueprint.gif)
 
 ### Datasets
 
@@ -234,6 +179,4 @@ If you use BEAVR Sim in your research, please cite the following works:
 
 ---
 
-<p align="center">
-  Built at <a href="https://github.com/ARCLab-MIT">MIT's ARCLab</a> for Space Robotics Research
-</p>
+Built at [MIT's ARCLab](https://github.com/ARCLab-MIT) for Space Robotics Research
