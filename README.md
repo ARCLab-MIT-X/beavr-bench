@@ -9,7 +9,9 @@
 [![arXiv](https://img.shields.io/badge/arXiv-2508.09606-b31b1b.svg)](https://arxiv.org/abs/2508.09606)
 [![HuggingFace](https://img.shields.io/badge/🤗-Datasets-yellow)](https://huggingface.co/collections/arclabmit/beavr-sim)
 
-**BEAVR Bench** is a high-performance simulation benchmark suite designed to test and evaluate physical AI algorithms. It unifies state-of-the-art tools like **[MuJoCo](https://github.com/google-deepmind/mujoco)**, **[MuJoCo Menagerie](https://github.com/google-deepmind/mujoco_menagerie)**, **[Isaac Lab](https://github.com/mujocolab/mjlab)**, and **[LeRobot](https://github.com/huggingface/lerobot)** into a single, cohesive benchmarking platform for robotic learning.
+**BEAVR Bench** is a simulation benchmark suite designed to test and evaluate physical AI algorithms.
+
+It unifies state-of-the-art tools like **[MuJoCo](https://github.com/google-deepmind/mujoco)**, **[MuJoCo Menagerie](https://github.com/google-deepmind/mujoco_menagerie)**, **[Isaac Lab](https://github.com/mujocolab/mjlab)**, and **[LeRobot](https://github.com/huggingface/lerobot)** into a single, cohesive benchmarking platform for robotic learning.
 
 Whether you are researching imitation learning, reinforcement learning, BEAVR Bench provides the performance needed to iterate quickly.
 
@@ -64,7 +66,7 @@ uv run beavr-eval --help
 
 ## Docker
 
-BEAVR Bench is best run with Docker to ensure all system dependencies (MuJoCo, EGL, OpenGL) are correctly configured.
+BEAVR Bench can be run with Docker.
 
 ### Docker Prerequisites
 
