@@ -51,6 +51,9 @@ try:
         episode_length: int = 1000
         """Maximum episode length in steps."""
 
+        seed: int | None = None
+        """Global environment seed for deterministic randomization."""
+
         # LeRobot requires features to be defined for policy compatibility
         # These are populated in __post_init__ based on the baked scene JSON
         features: dict[str, PolicyFeature] = field(default_factory=dict)
@@ -116,6 +119,7 @@ try:
             """Keyword arguments passed to gym.make()."""
             return {
                 "scene_name": self.scene,
+                "seed": self.seed,
             }
 
     LEROBOT_AVAILABLE = True

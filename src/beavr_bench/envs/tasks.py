@@ -576,6 +576,7 @@ class TeleopTask(BaseTask):
 def make_teleop_env(
     scene_name: str = SceneId.PICK_PLACE,
     cameras: list[CameraConfig] | None = None,
+    seed: int | None = None,
     **kwargs,
 ):
     """Factory function for TeleopTask.
@@ -600,4 +601,12 @@ def make_teleop_env(
     from beavr_bench.sim import load_baked_scene
 
     scene = load_baked_scene(scene_name)
-    return TeleopTask(scene=scene, cameras=cameras)
+    env = TeleopTask(scene=scene, cameras=cameras)
+    # If a seed is provided via registry.gym_kwargs, perform an initial seeded reset
+    if seed is not None:
+        try:
+            env.reset(seed=seed)
+        except Exception:
+            # Fall back gracefully if reset fails during creation; lerobot will call reset later
+            pass
+    return env

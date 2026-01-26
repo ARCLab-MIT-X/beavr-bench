@@ -8,6 +8,7 @@ Example:
         --policy.path=arclabmit/mobile_xarm7_act_beavrsim_serverswap_model \
         --env.type=beavr \
         --env.scene=scene_serverswap \
+        --env.seed=24 \
         --eval.batch_size=25 \
         --eval.n_episodes=1000
 """
