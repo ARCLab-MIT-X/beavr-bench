@@ -31,7 +31,7 @@ def generate_markdown_table(metrics: dict, timestamp: str) -> str:
         f"| **Max Reward (Avg)** | {metrics['avg_max_reward']:.3f} |",
         f"| **Episodes** | {metrics['n_episodes']} |",
         f"| **Eval Speed** | {metrics['eval_ep_s']:.2f} s/ep |",
-        f"| **Seed** | 26 |",
+        "| **Seed** | 26 |",
         "",
         "> [!TIP]",
         "> Detailed per-episode results can be found in [eval/eval_info.json](./eval/eval_info.json).",
