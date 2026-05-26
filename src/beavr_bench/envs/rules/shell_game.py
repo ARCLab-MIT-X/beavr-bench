@@ -81,6 +81,29 @@ class ShellGameRules(BaseRules):
         self._target_slot_idx = 0
         self._num_swaps = 0
 
+        # Touch reward tracking
+        self._touched_target_cup = False
+
+        # Cache geom IDs for contact detection
+        self._robot_geom_ids: set[int] = set()
+        self._cup_geom_ids: list[set[int]] = []  # One set per cup
+
+        for i in range(model.ngeom):
+            geom_name = mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_GEOM, i)
+            if geom_name is None:
+                continue
+            # Robot geoms have arm_ or gripper_ prefix
+            if geom_name.startswith("arm_") or geom_name.startswith("gripper_"):
+                self._robot_geom_ids.add(i)
+
+        for cup_name in self._cup_names:
+            cup_geoms: set[int] = set()
+            for i in range(model.ngeom):
+                geom_name = mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_GEOM, i)
+                if geom_name is not None and geom_name.startswith(cup_name):
+                    cup_geoms.add(i)
+            self._cup_geom_ids.append(cup_geoms)
+
     def _generate_shuffle(self, rng: np.random.Generator) -> None:
         """Generate deterministic slot swaps and compute final ball slot."""
         self._num_swaps = int(rng.integers(self.config.shuffle_min_swaps, self.config.shuffle_max_swaps + 1))
@@ -230,6 +253,23 @@ class ShellGameRules(BaseRules):
         truncated = self._step_count >= self.config.max_steps
         reward = (10.0 if self._success else -5.0 if self._failure else 0.0) * self.config.reward_scale
 
+        # Check for touch reward (only in TESTING, before any lift outcome)
+        if self._state == self.STATE_TESTING and not self._touched_target_cup and not terminated:
+            # Find the cup index that is currently at the target slot
+            target_cup_idx = self._cup_to_slot.index(self._target_slot_idx)
+            target_cup_geoms = self._cup_geom_ids[target_cup_idx]
+
+            for i in range(data.ncon):
+                contact = data.contact[i]
+                g1, g2 = contact.geom1, contact.geom2
+                robot_touches_target = (g1 in self._robot_geom_ids and g2 in target_cup_geoms) or (
+                    g2 in self._robot_geom_ids and g1 in target_cup_geoms
+                )
+                if robot_touches_target:
+                    self._touched_target_cup = True
+                    reward += 5.0 * self.config.reward_scale
+                    break
+
         return RuleResult(
             reward=reward,
             terminated=terminated,
@@ -240,6 +280,7 @@ class ShellGameRules(BaseRules):
                 "state": self._state,
                 "target_slot": self._target_slot_idx,
                 "lifted_slot": lifted_slot,
+                "touched_target_cup": self._touched_target_cup,
             },
         )
 
@@ -252,6 +293,7 @@ class ShellGameRules(BaseRules):
         self._success = False
         self._failure = False
         self._cup_to_slot = list(range(len(self._cup_names)))
+        self._touched_target_cup = False
         # Do NOT generate shuffle here; randomize_scene will do it.
 
     def get_shuffle_sequence(self) -> list[tuple[int, int]]:

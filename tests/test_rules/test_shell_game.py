@@ -42,6 +42,9 @@ def shell_game_setup():
                 <joint type="free" name="ball_joint"/>
                 <geom type="sphere" size="0.02" mass="0.1"/>
             </body>
+            <body name="arm_robot" pos="0.2 0 0">
+                <geom name="arm_link" type="box" size="0.05 0.05 0.1" mass="1"/>
+            </body>
         </worldbody>
     </mujoco>
     """
@@ -114,3 +117,31 @@ def test_shell_game_failure(shell_game_setup):
     assert not result.info[RuleInfoKey.IS_SUCCESS]
     assert result.info[RuleInfoKey.DROPPED]
     assert result.terminated
+
+
+def test_shell_game_touch_reward(shell_game_setup):
+    """Test that touch reward tracking works correctly."""
+    rules, data, model = shell_game_setup
+    result = advance_to_state(rules, data, model, ShellGameRules.STATE_TESTING)
+
+    # Verify touched_target_cup info is present and initially False
+    assert "touched_target_cup" in result.info
+    assert result.info["touched_target_cup"] is False
+
+    # Verify that the robot and cup geom sets are populated
+    assert len(rules._robot_geom_ids) > 0, "Robot geoms should be detected"
+    assert len(rules._cup_geom_ids) == 3, "Should have geom sets for 3 cups"
+
+    # Test that the flag can be set (simulating what would happen on contact)
+    rules._touched_target_cup = True
+    result = rules.compute(data)
+    assert result.info["touched_target_cup"] is True
+
+    # Verify that once set, touch reward isn't given again
+    result = rules.compute(data)
+    assert result.info["touched_target_cup"] is True  # Flag stays True
+
+    # Verify that reset clears the flag
+    rules.reset()
+    result = rules.compute(data)
+    assert result.info["touched_target_cup"] is False

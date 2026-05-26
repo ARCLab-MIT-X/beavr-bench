@@ -127,8 +127,8 @@ class ShellGameRuleConfig(TaskRulesConfig):
     shuffle_seed: int | None = (
         None  # Seed for deterministic shuffle (None = random) (Set this to shuffle_seed = 2026 during eval)
     )
-    shuffle_min_swaps: int = 2  # Minimum number of cup swaps per episode
-    shuffle_max_swaps: int = 5  # Maximum number of cup swaps per episode
+    shuffle_min_swaps: int = 1  # Minimum number of cup swaps per episode
+    shuffle_max_swaps: int = 3  # Maximum number of cup swaps per episode
     cup_names: tuple[str, ...] = ("cup_a", "cup_b", "cup_c")  # Cup body names
     lift_height_threshold: float = 0.05  # Height (m) above table for "lifted"
     max_steps: int = 400
@@ -154,7 +154,7 @@ class VanishingBlueprintRuleConfig(TaskRulesConfig):
     show_duration: float = 10.0  # Seconds to show hologram
     stack_tolerance: float = 0.05  # XY tolerance for "aligned" blocks (m)
     z_spacing: float = 0.04  # Vertical spacing (m), should match block height
-    max_steps: int = 750
+    max_steps: int = 850
 
 
 @TaskRulesConfig.register_subclass(TaskRuleType.SERVER_SWAP)
@@ -173,4 +173,4 @@ class ServerSwapRuleConfig(TaskRulesConfig):
     replacement_sled: str = "sled4"  # Spare sled on parts bench
     cue_duration: float = 5.0  # Seconds to show orange LED before vanish
     swap_tolerance: float = 0.1  # Tolerance (m) for sled placement
-    max_steps: int = 750
+    max_steps: int = 850
