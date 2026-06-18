@@ -274,5 +274,13 @@ If you use BEAVR Bench in your research, please cite the following works:
 ---
 
 <p align="center">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/0/06/US_Air_Force_Logo_Solid_Colour.svg" alt="USAF Logo" width="60"/>
+</p>
+
+<p align="justify">
+This work was sponsored by the Department of the Air Force Artificial Intelligence Accelerator and was accomplished under Cooperative Agreement Number FA8750-19-2-1000. The views and conclusions contained in this document are those of the authors and should not be interpreted as representing the official policies, either expressed or implied, of the Department of the Air Force or the U.S. Government. The U.S. Government is authorized to reproduce and distribute reprints for Government purposes notwithstanding any copyright notation herein.
+</p>
+
+<p align="center">
   Built with ❤️ at <a href="https://github.com/ARCLab-MIT"><b>MIT's ARCLab</b></a> for Space Robotics Research
 </p>
